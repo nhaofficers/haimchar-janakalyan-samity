@@ -1,4 +1,4 @@
-document.querySelectorAll('img[src="assets/logo.png"]').forEach(img=>{img.src='assets/logo.jpg';img.alt='হাইমচর উপজেলা জনকল্যাণ সমিতির লোগো'});
+document.querySelectorAll('img[src="assets/logo.png"]').forEach(img=>{img.src='assets/logo.jpg';img.alt='হাইমচর উপজেলা জনকল্যাণ সমিতি, ঢাকার লোগো'});
 
 const committee=[
 ['আবুল কালাম আজাদ','প্রাক্তন হিসাব মহানিয়ন্ত্রক (সিজিএ), গণপ্রজাতন্ত্রী বাংলাদেশ সরকার','সভাপতি','p10-img01.jpg'],
