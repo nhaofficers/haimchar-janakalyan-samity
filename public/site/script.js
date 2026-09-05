@@ -32,12 +32,17 @@ const committee=[
 ['মোঃ শহীদুল ইসলাম','চাকুরিজীবী','সদস্য','p13-img02.jpg'],
 ['আলহাজ্ব মোঃ সিরাজুল ইসলাম আখন্দ','বিশিষ্ট ব্যবসায়ী ও সমাজসেবক','সদস্য','p13-img03.jpg'],
 ['মোঃ ইউসুফ বেপারী','ব্যবসায়ী','সদস্য','p13-img04.png'],
-['মোঃ আনোয়ার হোসেন পাটওয়ারী','চাকুরিজীবী','সদস্য','p13-img05.jpg'],
+['মোঃ আনোয়ার হোসেন পাটওয়ারী','চাকুরী · কর পরিদর্শক, জাতীয় রাজস্ব বোর্ড, ঢাকা','সদস্য','../members/member-000054.jpeg'],
 ['ফরিদ হাসান','ব্যবসায়ী','সদস্য','p13-img06.jpg'],
 ['সুজিত কুমার বৈদ্য','চাকুরিজীবী, উপপরিচালক','সদস্য','p13-img07.jpg']
 ];
 const grid=document.querySelector('#organization .leaders');
 if(grid){grid.innerHTML=committee.map((m,i)=>`<article class="leader-card${i<9?' senior':''}"><div class="portrait"><img src="assets/leaders/${m[3]}" alt="${m[0]}" loading="lazy"></div><div class="member-info"><span class="member-no">${String(i+1).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d])}</span><h3>${m[0]}</h3><b>${m[2]}</b><p>${m[1]}</p></div></article>`).join('');const oldButton=document.querySelector('#showCommittee');const oldList=document.querySelector('.committee-list');oldButton?.remove();oldList?.remove()}
+
+const bnDigits=value=>String(value).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const clean=value=>value&& !/^[.,।\s-]+$/.test(value) ? value.trim() : '—';
+const memberRows=document.querySelector('#generalMembers');
+if(memberRows&&window.generalMembers){memberRows.innerHTML=window.generalMembers.map((m,i)=>`<tr><td>${bnDigits(i+1)}</td><td><div class="member-photo">${m.image?`<img src="${m.image}" alt="${m.firstName} ${m.lastName}" loading="lazy">`:'<span>ছবি নেই</span>'}</div></td><td><strong>${clean(`${m.firstName} ${m.lastName}`)}</strong></td><td>${bnDigits(m.memberNumber)}</td><td><a href="tel:${m.phone.replace(/\s/g,'')}">${clean(m.phone)}</a></td><td>${clean(m.presentAddress)}</td><td>${clean([m.profession,m.designation].filter(Boolean).join(' · '))}</td><td>${clean(m.bloodGroup)}</td><td>${clean(m.reference)}</td></tr>`).join('')}
 
 const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('nav');menu.onclick=()=>{nav.classList.toggle('open');menu.textContent=nav.classList.contains('open')?'✕':'☰'};document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>nav.classList.remove('open'));
 const slides=[...document.querySelectorAll('.slide')],dots=[...document.querySelectorAll('.slider-dots button')];let current=0,timer;function go(i){current=(i+slides.length)%slides.length;slides.forEach((s,n)=>s.classList.toggle('active',n===current));dots.forEach((d,n)=>d.classList.toggle('active',n===current));clearInterval(timer);timer=setInterval(()=>go(current+1),6500)}document.querySelector('.next').onclick=()=>go(current+1);document.querySelector('.prev').onclick=()=>go(current-1);dots.forEach((d,i)=>d.onclick=()=>go(i));go(0);
