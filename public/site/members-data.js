@@ -62,7 +62,7 @@ window.generalMembers = [
   {
     "uid": "32bb790e-624f-4018-9fd3-92592d737e22",
     "firstName": "মোঃ মুজিবুর রহমান",
-    "lastName": "পাটওয়ারী",
+    "lastName": "",
     "memberNumber": "000005",
     "phone": "01716-660867",
     "profession": "বিশিষ্ট ব্যবসায়ী ও সমাজসেবক",
