@@ -42,7 +42,34 @@ if(grid){grid.innerHTML=committee.map((m,i)=>`<article class="leader-card${i<9?'
 const bnDigits=value=>String(value).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
 const clean=value=>value&& !/^[.,।\s-]+$/.test(value) ? value.trim() : '—';
 const memberRows=document.querySelector('#generalMembers');
-if(memberRows&&window.generalMembers){memberRows.innerHTML=window.generalMembers.map((m,i)=>`<tr><td>${bnDigits(i+1)}</td><td><div class="member-photo">${m.image?`<img src="${m.image}" alt="${m.firstName} ${m.lastName}" loading="lazy">`:'<span>ছবি নেই</span>'}</div></td><td><strong>${clean(`${m.firstName} ${m.lastName}`)}</strong></td><td>${bnDigits(m.memberNumber)}</td><td><a href="tel:${m.phone.replace(/\s/g,'')}">${clean(m.phone)}</a></td><td>${clean(m.presentAddress)}</td><td>${clean([m.profession,m.designation].filter(Boolean).join(' · '))}</td><td>${clean(m.bloodGroup)}</td><td>${clean(m.reference)}</td></tr>`).join('')}
+if(memberRows&&window.generalMembers){
+  const search=document.querySelector('#memberSearch');
+  const pageSizeSelect=document.querySelector('#memberPageSize');
+  const pagination=document.querySelector('#memberPagination');
+  const resultMeta=document.querySelector('#memberResultMeta');
+  let page=1;
+  const normalize=value=>String(value??'').toLocaleLowerCase('bn-BD').replace(/[০-৯]/g,d=>String('০১২৩৪৫৬৭৮৯'.indexOf(d))).replace(/\s+/g,' ').trim();
+  const row=(m,i)=>`<tr><td>${bnDigits(i+1)}</td><td><div class="member-photo">${m.image?`<img src="${m.image}" alt="${m.firstName} ${m.lastName}" loading="lazy">`:'<span>ছবি নেই</span>'}</div></td><td><strong>${clean(`${m.firstName} ${m.lastName}`)}</strong></td><td>${bnDigits(m.memberNumber)}</td><td><a href="tel:${m.phone.replace(/\s/g,'')}">${clean(m.phone)}</a></td><td>${clean(m.presentAddress)}</td><td>${clean([m.profession,m.designation].filter(Boolean).join(' · '))}</td><td>${clean(m.bloodGroup)}</td><td>${clean(m.reference)}</td></tr>`;
+  const render=()=>{
+    const term=normalize(search.value);
+    const filtered=window.generalMembers.filter(member=>!term||normalize(Object.values(member).join(' ')).includes(term));
+    const size=pageSizeSelect.value==='all'?Math.max(filtered.length,1):Number(pageSizeSelect.value);
+    const pages=Math.max(1,Math.ceil(filtered.length/size));
+    page=Math.min(page,pages);
+    const start=(page-1)*size;
+    const visible=filtered.slice(start,start+size);
+    memberRows.innerHTML=visible.length?visible.map((m,i)=>row(m,start+i)).join(''):`<tr><td class="member-empty" colspan="9">কোনো সদস্য পাওয়া যায়নি</td></tr>`;
+    resultMeta.textContent=filtered.length?`মোট ${bnDigits(filtered.length)} জনের মধ্যে ${bnDigits(start+1)}–${bnDigits(start+visible.length)} জন দেখানো হচ্ছে`:'কোনো ফলাফল পাওয়া যায়নি';
+    if(pageSizeSelect.value==='all'||pages===1){pagination.innerHTML='';return}
+    const pageButtons=[];
+    for(let i=1;i<=pages;i++)pageButtons.push(`<button type="button" data-page="${i}"${i===page?' class="active" aria-current="page"':''}>${bnDigits(i)}</button>`);
+    pagination.innerHTML=`<button type="button" data-page="${page-1}" ${page===1?'disabled':''} aria-label="আগের পাতা">‹ আগের</button>${pageButtons.join('')}<button type="button" data-page="${page+1}" ${page===pages?'disabled':''} aria-label="পরের পাতা">পরের ›</button>`;
+  };
+  search.addEventListener('input',()=>{page=1;render()});
+  pageSizeSelect.addEventListener('change',()=>{page=1;render()});
+  pagination.addEventListener('click',event=>{const button=event.target.closest('button[data-page]');if(!button||button.disabled)return;page=Number(button.dataset.page);render();document.querySelector('#members .member-tools').scrollIntoView({behavior:'smooth',block:'start'})});
+  render();
+}
 
 const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('nav');menu.onclick=()=>{nav.classList.toggle('open');menu.textContent=nav.classList.contains('open')?'✕':'☰'};document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>nav.classList.remove('open'));
 const slides=[...document.querySelectorAll('.slide')],dots=[...document.querySelectorAll('.slider-dots button')];let current=0,timer;function go(i){current=(i+slides.length)%slides.length;slides.forEach((s,n)=>s.classList.toggle('active',n===current));dots.forEach((d,n)=>d.classList.toggle('active',n===current));clearInterval(timer);timer=setInterval(()=>go(current+1),6500)}document.querySelector('.next').onclick=()=>go(current+1);document.querySelector('.prev').onclick=()=>go(current-1);dots.forEach((d,i)=>d.onclick=()=>go(i));go(0);
