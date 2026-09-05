@@ -62,7 +62,7 @@ window.generalMembers = [
   {
     "uid": "32bb790e-624f-4018-9fd3-92592d737e22",
     "firstName": "মোঃ মুজিবুর রহমান",
-    "lastName": "",
+    "lastName": "পাটওয়ারী",
     "memberNumber": "000005",
     "phone": "01716-660867",
     "profession": "বিশিষ্ট ব্যবসায়ী ও সমাজসেবক",
@@ -797,7 +797,7 @@ window.generalMembers = [
   {
     "uid": "915c3c3c-00c1-455b-934e-7b0d0ced85f1",
     "firstName": "মোঃ আনোয়ার হোসেন",
-    "lastName": "পাটওয়ারী",
+    "lastName": "",
     "memberNumber": "000054",
     "phone": "01721954410",
     "profession": "চাকুরী",
